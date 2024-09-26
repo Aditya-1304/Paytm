@@ -7,7 +7,7 @@ const router = express.Router();
 
 const signupSchema = zod.object({
     username : zod.string().email(),
-    password : zod.string().min(8).max(20),
+    password : zod.string(),
     firstName : zod.string(),
     lastName : zod.string(),
 
@@ -52,6 +52,36 @@ router.post("/signup", async (req,res)=> {
 })
 
 
-const 
+const siginSchema = zod.object({
+    username : zod.string().email(),
+    password : zod.string()
+})
+
+router.post("/signin", async (req,res)=> {
+    const {success} = siginSchema.safeParse(req.body)
+    if(!success){
+        return res.json({
+            message : "Incorrect inputs"
+        })
+    }
+
+    const user = await User.findOne({
+        username : req.body.username,
+        password : req.body.password
+    })
+
+    if(user) {
+        const token = jwt.sign({
+            userId : user._id,
+        },JWT_SECRET)
+
+        res.json({
+            token:token
+        })
+        return;
+    }
+
+
+})
 
 module.exports = router;
