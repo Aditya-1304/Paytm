@@ -7,7 +7,7 @@ const router = express.Router();
 
 const signupSchema = zod.object({
     username : zod.string(),
-    password : zod.string(),
+    password : zod.string().min(3),
     firstName : zod.string(),
     lastName : zod.string(),
 
